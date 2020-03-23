@@ -17,8 +17,12 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WalletApi {
     private static WalletApi walletApi;
@@ -77,10 +81,8 @@ public class WalletApi {
         if (res.getStatus() == 200) {
             JSONObject data = body.getJSONObject("Data");
             JSONArray transactions = data.getJSONArray("Transactions");
-            List<SelfTransactions> result = new ArrayList<>();
 
-            for (Object t:
-                 transactions) {
+            Stream<SelfTransactions> resultStream = transactions.toList().stream().map(t -> {
                 var tData =  (JSONObject)t;
                 SelfTransactions selfTransactions = new SelfTransactions();
                 selfTransactions.setAmount(tData.getBigDecimal("Amount"));
@@ -91,8 +93,10 @@ public class WalletApi {
                 selfTransactions.setNewBalance(tData.getBigDecimal("NewBalance"));
                 selfTransactions.setType(tData.getString("Type"));
 
-                result.add(selfTransactions);
-            }
+                return selfTransactions;
+            });
+
+            List<SelfTransactions> result = resultStream.collect(Collectors.toList());
 
             return result;
         }
