@@ -4,12 +4,15 @@ import com.wallets.api.client.WalletApi;
 import com.wallets.api.exceptions.InvalidRequestException;
 import com.wallets.api.exceptions.ServerErrorException;
 import com.wallets.api.exceptions.UnauthorizedException;
+import com.wallets.api.models.requests.BaseRequest;
 import com.wallets.api.models.requests.self.BalanceRequest;
 import com.wallets.api.models.requests.self.TransactionsRequest;
 import com.wallets.api.models.requests.self.VerifyBvnRequest;
 import com.wallets.api.models.responses.Balance;
 import com.wallets.api.models.responses.self.SelfTransactions;
 import com.wallets.api.models.responses.self.VerifySelfBvn;
+import com.wallets.api.models.responses.self.Wallet;
+import com.wallets.api.models.responses.self.WalletTransaction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +50,7 @@ public class WalletApiTests {
 
         List<SelfTransactions> selfTransactions = walletApi.getTransactionsForSelf(transactionsRequest);
 
-        Assert.assertTrue(selfTransactions.size() > 0);
+        Assert.assertTrue(selfTransactions.size() >= 0);
     }
 
     @Test
@@ -59,5 +62,27 @@ public class WalletApiTests {
         VerifySelfBvn selfBvn = walletApi.verifyBvnForSelf(bvnRequest);
 
         Assert.assertNotNull(selfBvn);
+    }
+
+    @Test
+    public void getWallets() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var baseRequest = new BaseRequest();
+
+        List<Wallet> wallets = walletApi.getWallets(baseRequest);
+
+        Assert.assertTrue(wallets.size() >= 0);
+    }
+
+    @Test
+    public void getWalletToWalletTransactions() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var transactionsRequest = new TransactionsRequest();
+        transactionsRequest.setTransactionType(2);
+        transactionsRequest.setDateFrom("2020-01-01");
+        transactionsRequest.setDateTo("2020-03-18");
+        transactionsRequest.setCurrency("NGN");
+
+        List<WalletTransaction> walletTransactions = walletApi.getWalletToWalletTransactions(transactionsRequest);
+
+        Assert.assertTrue(walletTransactions.size() >= 0);
     }
 }

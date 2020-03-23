@@ -1,14 +1,23 @@
 package com.wallets.api.models.responses.self;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class WalletTransaction {
+    @JsonProperty("Amount")
     private BigDecimal amount;
+    @JsonProperty("DateOfTransaction")
     private Date dateOfTransaction;
+    @JsonProperty("TransactionRef")
     private String transactionRef;
+    @JsonProperty("StatusMesssage")
     private String statusMessage;
+    @JsonProperty("TransactionType")
     private String transactionType;
+    @JsonProperty("PhoneNumber")
+    private String phoneNumber;
 
     public BigDecimal getAmount() {
         return amount;
@@ -49,4 +58,13 @@ public class WalletTransaction {
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 }

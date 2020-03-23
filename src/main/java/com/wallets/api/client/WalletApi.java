@@ -5,14 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wallets.api.exceptions.InvalidRequestException;
 import com.wallets.api.exceptions.ServerErrorException;
 import com.wallets.api.exceptions.UnauthorizedException;
+import com.wallets.api.models.requests.BaseRequest;
 import com.wallets.api.models.requests.self.BalanceRequest;
 import com.wallets.api.models.requests.self.TransactionsRequest;
 import com.wallets.api.models.requests.self.VerifyBvnRequest;
 import com.wallets.api.models.responses.ApiResponse;
 import com.wallets.api.models.responses.Balance;
-import com.wallets.api.models.responses.self.SelfTransactions;
-import com.wallets.api.models.responses.self.TransactionModel;
-import com.wallets.api.models.responses.self.VerifySelfBvn;
+import com.wallets.api.models.responses.self.*;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
@@ -77,14 +76,37 @@ public class WalletApi {
     public VerifySelfBvn verifyBvnForSelf(VerifyBvnRequest req) throws ServerErrorException, UnauthorizedException, InvalidRequestException, IOException {
         req.setSecretKey(secretKey);
         HttpResponse<String> res = post(WalletApiUrls.SelfUrls.VERIFY_BVN, req);
-        String body = res.getBody();
 
         if (res.getStatus() == 200) {
-            return getObjectMapper().readValue(body, VerifySelfBvn.class);
+            return getObjectMapper().readValue(res.getBody(), VerifySelfBvn.class);
         }
 
         ThrowError(res);
 
+        return null;
+    }
+
+    public List<Wallet> getWallets(BaseRequest baseRequest) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        baseRequest.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.SelfUrls.GET_WALLETS, baseRequest);
+
+        if (res.getStatus() == 200) {
+            ApiResponse<List<Wallet>> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<List<Wallet>>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public List<WalletTransaction> getWalletToWalletTransactions(TransactionsRequest request) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        request.setSecretKey(secretKey);
+        HttpResponse<String> response = post(WalletApiUrls.SelfUrls.WALLET_TRANSACTIONS, request);
+
+        if (response.getStatus() == 200) {
+            ApiResponse<List<WalletTransaction>> result = getObjectMapper().readValue(response.getBody(), new TypeReference<ApiResponse<List<WalletTransaction>>>(){});
+            return result.getData();
+        }
+        ThrowError(response);
         return null;
     }
 

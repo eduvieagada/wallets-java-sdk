@@ -1,19 +1,35 @@
 package com.wallets.api.models.responses.self;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Wallet {
+    @JsonProperty("Username")
     private String username;
+    @JsonProperty("AccountNumber")
     private String accountNumber;
+    @JsonProperty("BVN")
     private String bvn;
+    @JsonProperty("City")
     private String city;
+    @JsonProperty("Country")
     private String country;
-    private Date dateCreated;
-    private Date dateOfBirth;
+    @JsonProperty("DateCreated")
+    private String dateCreated;
+    @JsonProperty("DateOfBirth")
+    private String dateOfBirth;
+    @JsonProperty("Email")
     private String email;
+    @JsonProperty("FirstName")
     private String firstName;
+    @JsonProperty("LastName")
     private String lastName;
+    @JsonProperty("PhoneNumber")
     private String phoneNumber;
+    @JsonProperty("AvailableBalance")
+    private BigDecimal availableBalance;
 
     public String getUsername() {
         return username;
@@ -55,19 +71,19 @@ public class Wallet {
         this.country = country;
     }
 
-    public Date getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -101,5 +117,13 @@ public class Wallet {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public BigDecimal getAvailableBalance() {
+        return availableBalance;
+    }
+
+    public void setAvailableBalance(BigDecimal availableBalance) {
+        this.availableBalance = availableBalance;
     }
 }
