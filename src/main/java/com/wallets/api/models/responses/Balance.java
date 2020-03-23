@@ -6,6 +6,11 @@ public class Balance {
     private BigDecimal walletBalance;
     private String walletCurrency;
 
+    public Balance(BigDecimal walletBalance, String walletCurrency) {
+        this.walletBalance = walletBalance;
+        this.walletCurrency = walletCurrency;
+    }
+
     public BigDecimal getWalletBalance() {
         return walletBalance;
     }

@@ -1,7 +1,8 @@
 package com.wallets.api.client;
 
-public class WalletApiUrls {
-    public static final String BASE_URL = "https://api.wallets.africa";
+public final class WalletApiUrls {
+    public static final String LIVE_BASE_URL = "https://api.wallets.africa";
+    public static final String TEST_BASE_URL = "https://sandbox.wallets.africa";
 
     public static final class SelfUrls {
         public static final String BALANCE = "/self/balance";
