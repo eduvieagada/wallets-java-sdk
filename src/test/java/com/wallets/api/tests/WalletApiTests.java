@@ -14,9 +14,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 public class WalletApiTests {
@@ -26,7 +26,7 @@ public class WalletApiTests {
         walletApi = WalletApi.getInstance("uvjqzm5xl6bw", "hfucj5jatq8h", false);
     }
     @Test
-    public void getBalanceTest() throws InvalidRequestException, ServerErrorException, UnauthorizedException {
+    public void getBalanceTest() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
 
         var balanceRequest = new BalanceRequest();
 
@@ -38,7 +38,7 @@ public class WalletApiTests {
     }
 
     @Test
-    public void getTransactionsForSelf() throws ServerErrorException, ParseException, InvalidRequestException, UnauthorizedException {
+    public void getTransactionsForSelf() throws ServerErrorException, ParseException, InvalidRequestException, UnauthorizedException, IOException {
         var transactionsRequest = new TransactionsRequest();
         transactionsRequest.setCurrency("NGN");
         transactionsRequest.setDateFrom("2020-01-01");
@@ -51,7 +51,7 @@ public class WalletApiTests {
     }
 
     @Test
-    public void verifyBvnForSelf() throws ServerErrorException, UnauthorizedException, InvalidRequestException {
+    public void verifyBvnForSelf() throws ServerErrorException, UnauthorizedException, InvalidRequestException, IOException {
         var bvnRequest = new VerifyBvnRequest();
         bvnRequest.setBvn("22231485915");
         bvnRequest.setDateOfBirth("14-04-1992");

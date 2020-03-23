@@ -1,19 +1,33 @@
 package com.wallets.api.models.responses.self;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 public class VerifySelfBvn {
+    @JsonProperty("Message")
     private String message;
+    @JsonProperty("FirstName")
     private String firstName;
+    @JsonProperty("LastName")
     private String lastName;
+    @JsonProperty("Email")
     private String email;
+    @JsonProperty("WalletBalance")
     private BigDecimal walletBalance;
+    @JsonProperty("BVN")
     private String bvn;
+    @JsonProperty("HasBVN")
     private Boolean hasBvn;
+    @JsonProperty("PassCodeSet")
     private Boolean passCodeSet;
+    @JsonProperty("DisplayPicture")
     private String displayPicture;
+    @JsonProperty("Username")
     private String username;
+    @JsonProperty("UserProgress")
     private UserProgress userProgress;
+    @JsonProperty("AccountType")
     private AccountType AccountType;
 
     public String getMessage() {

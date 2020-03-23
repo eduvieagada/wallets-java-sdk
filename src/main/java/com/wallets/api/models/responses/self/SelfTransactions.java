@@ -1,16 +1,26 @@
 package com.wallets.api.models.responses.self;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class SelfTransactions {
+    @JsonProperty("Amount")
     private BigDecimal amount;
+    @JsonProperty("Currency")
     private String currency;
+    @JsonProperty("Category")
     private String category;
+    @JsonProperty("Narration")
     private String narration;
+    @JsonProperty("DateTransacted")
     private String dateTransacted;
+    @JsonProperty("PreviousBalance")
     private BigDecimal previousBalance;
+    @JsonProperty("NewBalance")
     private BigDecimal newBalance;
+    @JsonProperty("Type")
     private String type;
 
     public BigDecimal getAmount() {

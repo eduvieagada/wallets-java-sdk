@@ -1,15 +1,15 @@
 package com.wallets.api.models.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 public class Balance {
+    @JsonProperty("WalletBalance")
     private BigDecimal walletBalance;
+    @JsonProperty("WalletCurrency")
     private String walletCurrency;
 
-    public Balance(BigDecimal walletBalance, String walletCurrency) {
-        this.walletBalance = walletBalance;
-        this.walletCurrency = walletCurrency;
-    }
 
     public BigDecimal getWalletBalance() {
         return walletBalance;
