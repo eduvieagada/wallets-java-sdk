@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class VerifyBvnRequest extends BaseRequest {
     private String bvn;
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     public String getBvn() {
         return bvn;
@@ -16,11 +16,11 @@ public class VerifyBvnRequest extends BaseRequest {
         this.bvn = bvn;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 }

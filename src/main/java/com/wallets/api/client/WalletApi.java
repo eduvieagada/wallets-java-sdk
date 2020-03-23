@@ -6,22 +6,24 @@ import com.wallets.api.exceptions.ServerErrorException;
 import com.wallets.api.exceptions.UnauthorizedException;
 import com.wallets.api.models.requests.self.BalanceRequest;
 import com.wallets.api.models.requests.self.TransactionsRequest;
+import com.wallets.api.models.requests.self.VerifyBvnRequest;
 import com.wallets.api.models.responses.Balance;
+import com.wallets.api.models.responses.self.AccountType;
 import com.wallets.api.models.responses.self.SelfTransactions;
-import kong.unirest.*;
+import com.wallets.api.models.responses.self.UserProgress;
+import com.wallets.api.models.responses.self.VerifySelfBvn;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.ObjectMapper;
+import kong.unirest.Unirest;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WalletApi {
@@ -99,6 +101,42 @@ public class WalletApi {
             List<SelfTransactions> result = resultStream.collect(Collectors.toList());
 
             return result;
+        }
+
+        ThrowError(res, body);
+
+        return null;
+    }
+
+    public VerifySelfBvn verifyBvnForSelf(VerifyBvnRequest req) throws ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<JsonNode> res = post(WalletApiUrls.SelfUrls.VERIFY_BVN, req);
+        JSONObject body = res.getBody().getObject();
+
+        if (res.getStatus() == 200) {
+            var verifySelfBvn = new VerifySelfBvn();
+            verifySelfBvn.setAccountType(AccountType.valueOf(body.getInt("AccountType")));
+            verifySelfBvn.setBvn(body.getString("BVN"));
+
+            try {
+                verifySelfBvn.setDisplayPicture(body.getString("DisplayPicture"));
+            } catch (Exception ex){
+            }
+
+            try {
+                verifySelfBvn.setUsername(body.getString("Username"));
+            } catch (Exception e){
+            }
+
+            verifySelfBvn.setEmail(body.getString("Email"));
+            verifySelfBvn.setFirstName(body.getString("FirstName"));
+            verifySelfBvn.setLastName(body.getString("LastName"));
+            verifySelfBvn.setHasBvn(body.getBoolean("HasBVN"));
+            verifySelfBvn.setUserProgress(UserProgress.valueOf(body.getInt("UserProgress")));
+
+            verifySelfBvn.setWalletBalance(body.getBigDecimal("WalletBalance"));
+
+            return verifySelfBvn;
         }
 
         ThrowError(res, body);

@@ -6,8 +6,10 @@ import com.wallets.api.exceptions.ServerErrorException;
 import com.wallets.api.exceptions.UnauthorizedException;
 import com.wallets.api.models.requests.self.BalanceRequest;
 import com.wallets.api.models.requests.self.TransactionsRequest;
+import com.wallets.api.models.requests.self.VerifyBvnRequest;
 import com.wallets.api.models.responses.Balance;
 import com.wallets.api.models.responses.self.SelfTransactions;
+import com.wallets.api.models.responses.self.VerifySelfBvn;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,5 +48,16 @@ public class WalletApiTests {
         List<SelfTransactions> selfTransactions = walletApi.getTransactionsForSelf(transactionsRequest);
 
         Assert.assertTrue(selfTransactions.size() > 0);
+    }
+
+    @Test
+    public void verifyBvnForSelf() throws ServerErrorException, UnauthorizedException, InvalidRequestException {
+        var bvnRequest = new VerifyBvnRequest();
+        bvnRequest.setBvn("22231485915");
+        bvnRequest.setDateOfBirth("14-04-1992");
+
+        VerifySelfBvn selfBvn = walletApi.verifyBvnForSelf(bvnRequest);
+
+        Assert.assertNotNull(selfBvn);
     }
 }
