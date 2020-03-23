@@ -8,7 +8,7 @@ public class SelfTransactions {
     private String currency;
     private String category;
     private String narration;
-    private Date dateTransacted;
+    private String dateTransacted;
     private BigDecimal previousBalance;
     private BigDecimal newBalance;
     private String type;
@@ -45,11 +45,11 @@ public class SelfTransactions {
         this.narration = narration;
     }
 
-    public Date getDateTransacted() {
+    public String getDateTransacted() {
         return dateTransacted;
     }
 
-    public void setDateTransacted(Date dateTransacted) {
+    public void setDateTransacted(String dateTransacted) {
         this.dateTransacted = dateTransacted;
     }
 

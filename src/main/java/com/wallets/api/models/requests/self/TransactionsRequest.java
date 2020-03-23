@@ -5,10 +5,10 @@ import com.wallets.api.models.requests.BaseRequest;
 import java.util.Date;
 
 public class TransactionsRequest extends BaseRequest {
-    private int skip;
-    private int take;
-    private Date dateFrom;
-    private Date dateTo;
+    private int skip = 0;
+    private int take = 10;
+    private String dateFrom;
+    private String dateTo;
     private int transactionType;
     private String currency;
 
@@ -28,19 +28,19 @@ public class TransactionsRequest extends BaseRequest {
         this.take = take;
     }
 
-    public Date getDateFrom() {
+    public String getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(Date dateFrom) {
+    public void setDateFrom(String dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public Date getDateTo() {
+    public String getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(Date dateTo) {
+    public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
 
