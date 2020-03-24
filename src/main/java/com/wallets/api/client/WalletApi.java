@@ -6,12 +6,23 @@ import com.wallets.api.exceptions.InvalidRequestException;
 import com.wallets.api.exceptions.ServerErrorException;
 import com.wallets.api.exceptions.UnauthorizedException;
 import com.wallets.api.models.requests.BaseRequest;
+import com.wallets.api.models.requests.account.ResolveBvnRequest;
+import com.wallets.api.models.requests.airtime.AirtimePurchaseRequest;
 import com.wallets.api.models.requests.self.BalanceRequest;
 import com.wallets.api.models.requests.self.TransactionsRequest;
 import com.wallets.api.models.requests.self.VerifyBvnRequest;
+import com.wallets.api.models.requests.transfer.AccountEnquiryRequest;
+import com.wallets.api.models.requests.transfer.TransferDetailsRequest;
+import com.wallets.api.models.requests.wallet.*;
 import com.wallets.api.models.responses.ApiResponse;
 import com.wallets.api.models.responses.Balance;
+import com.wallets.api.models.responses.account.BvnData;
+import com.wallets.api.models.responses.airtime.AirtimeModel;
+import com.wallets.api.models.responses.airtime.AirtimePurchaseResponse;
 import com.wallets.api.models.responses.self.*;
+import com.wallets.api.models.responses.transfer.Bank;
+import com.wallets.api.models.responses.transfer.TransferDetails;
+import com.wallets.api.models.responses.wallet.*;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
@@ -107,6 +118,182 @@ public class WalletApi {
             return result.getData();
         }
         ThrowError(response);
+        return null;
+    }
+
+    public DebitResponse debitWallet(DebitWalletRequest request) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        request.setSecretKey(secretKey);
+        HttpResponse<String> response = post(WalletApiUrls.WalletUrls.DEBIT, request);
+
+        if (response.getStatus() == 200) {
+            ApiResponse<DebitResponse> result = getObjectMapper().readValue(response.getBody(), new TypeReference<ApiResponse<DebitResponse>>(){});
+            return result.getData();
+        }
+        ThrowError(response);
+        return null;
+    }
+
+    public CreditResponse creditWallet(CreditWalletRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.CREDIT, req);
+
+        if (res.getStatus() == 200) {
+            ApiResponse<CreditResponse> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<CreditResponse>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public WalletData createWallet(CreateWalletRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.CREATE, req);
+        if (res.getStatus() == 200) {
+            ApiResponse<WalletData> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<WalletData>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public WalletData generateWallet(GenerateWalletRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.GENERATE, req);
+        if (res.getStatus() == 200) {
+            ApiResponse<WalletData> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<WalletData>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public AccountData generateWalletAccountNo(GenerateAccountNoRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.GENERATE_ACCOUNT_NO, req);
+        if (res.getStatus() == 200) {
+            ApiResponse<AccountData> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<AccountData>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public AccountData retrieveWalletAccountNo(RetrieveAccountNoRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.RETRIEVE_ACCOUNT_NO, req);
+        if (res.getStatus() == 200) {
+            ApiResponse<AccountData> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<AccountData>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public ApiResponse setWalletPassword(SetPasswordRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.SET_PASSWORD, req);
+        if (res.getStatus() == 200) {
+            ApiResponse result = getObjectMapper().readValue(res.getBody(), ApiResponse.class);
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public VerifySelfBvn verifyWalletBvn(VerifyBvnRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.VERIFY, req);
+        if (res.getStatus() == 200) {
+            VerifySelfBvn result = getObjectMapper().readValue(res.getBody(), VerifySelfBvn.class);
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public User getUser(GetUserRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.GET_WALLET, req);
+        if (res.getStatus() == 200) {
+            ApiResponse<User> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<User>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public Balance getWalletBalance(WalletBalanceRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.WalletUrls.GET_BALANCE, req);
+        if (res.getStatus() == 200) {
+            ApiResponse<Balance> result = getObjectMapper().readValue(res.getBody(), new TypeReference<ApiResponse<Balance>>(){});
+            return result.getData();
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public List<Bank> getBanks() throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        HttpResponse<String> res = post(WalletApiUrls.PayoutsUrls.GET_BANKS, null);
+        if (res.getStatus() == 200) {
+            List<Bank> result = getObjectMapper().readValue(res.getBody(), new TypeReference<List<Bank>>(){});
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public TransferDetails getTransferDetails(TransferDetailsRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.PayoutsUrls.TRANSACTION_DETAILS, req);
+        if (res.getStatus() == 200) {
+            TransferDetails result = getObjectMapper().readValue(res.getBody(), TransferDetails.class);
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public AccountData getAccountData(AccountEnquiryRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.PayoutsUrls.ACCOUNT_ENQUIRY, req);
+        if (res.getStatus() == 200) {
+            AccountData result = getObjectMapper().readValue(res.getBody(), AccountData.class);
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public AirtimeModel getAirtimeProviders() throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        HttpResponse<String> res = post(WalletApiUrls.AirtimeUrls.PROVIDERS, null);
+        if (res.getStatus() == 200) {
+            AirtimeModel result = getObjectMapper().readValue(res.getBody(), AirtimeModel.class);
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public AirtimePurchaseResponse airtimePurchase(AirtimePurchaseRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.AirtimeUrls.PURCHASE, req);
+        if (res.getStatus() == 200) {
+            AirtimePurchaseResponse result = getObjectMapper().readValue(res.getBody(), AirtimePurchaseResponse.class);
+            return result;
+        }
+        ThrowError(res);
+        return null;
+    }
+
+    public BvnData resolveBvn(ResolveBvnRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+        req.setSecretKey(secretKey);
+        HttpResponse<String> res = post(WalletApiUrls.IdentityUrls.RESOLVE_BVN, req);
+        if (res.getStatus() == 200) {
+            BvnData result = getObjectMapper().readValue(res.getBody(), BvnData.class);
+            return result;
+        }
+        ThrowError(res);
         return null;
     }
 
