@@ -1,7 +1,9 @@
 package com.wallets.api.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.wallets.api.exceptions.InvalidRequestException;
 import com.wallets.api.exceptions.ServerErrorException;
 import com.wallets.api.exceptions.UnauthorizedException;
@@ -16,6 +18,7 @@ import com.wallets.api.models.requests.transfer.TransferDetailsRequest;
 import com.wallets.api.models.requests.wallet.*;
 import com.wallets.api.models.responses.ApiResponse;
 import com.wallets.api.models.responses.Balance;
+import com.wallets.api.models.responses.Response;
 import com.wallets.api.models.responses.account.BvnData;
 import com.wallets.api.models.responses.airtime.AirtimeModel;
 import com.wallets.api.models.responses.airtime.AirtimePurchaseResponse;
@@ -189,11 +192,11 @@ public class WalletApi {
         return null;
     }
 
-    public ApiResponse setWalletPassword(SetPasswordRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
+    public Response setWalletPassword(SetPasswordRequest req) throws IOException, ServerErrorException, UnauthorizedException, InvalidRequestException {
         req.setSecretKey(secretKey);
         HttpResponse<String> res = post(WalletApiUrls.WalletUrls.SET_PASSWORD, req);
         if (res.getStatus() == 200) {
-            ApiResponse result = getObjectMapper().readValue(res.getBody(), ApiResponse.class);
+            Response result = getObjectMapper().readValue(res.getBody(), Response.class);
             return result;
         }
         ThrowError(res);
@@ -326,6 +329,8 @@ public class WalletApi {
 
 
     private ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .setPropertyNamingStrategy(PropertyNamingStrategy.UPPER_CAMEL_CASE);
     }
 }

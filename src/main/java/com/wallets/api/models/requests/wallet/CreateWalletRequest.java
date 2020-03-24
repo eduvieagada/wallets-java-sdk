@@ -10,7 +10,7 @@ public class CreateWalletRequest extends BaseRequest {
     private String email;
     private String phoneNumber;
     private String password;
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     public String getFirstName() {
         return firstName;
@@ -52,11 +52,11 @@ public class CreateWalletRequest extends BaseRequest {
         this.password = password;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 }

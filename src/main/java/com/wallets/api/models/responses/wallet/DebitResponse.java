@@ -1,10 +1,15 @@
 package com.wallets.api.models.responses.wallet;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 public class DebitResponse {
+    @JsonProperty("AmountCredited")
     private BigDecimal amountCredited;
+    @JsonProperty("CustomerWalletBalance")
     private BigDecimal customerWalletBalance;
+    @JsonProperty("DeveloperWalletBalance")
     private BigDecimal businessWalletBalance;
 
     public BigDecimal getAmountCredited() {

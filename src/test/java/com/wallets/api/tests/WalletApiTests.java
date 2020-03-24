@@ -8,11 +8,18 @@ import com.wallets.api.models.requests.BaseRequest;
 import com.wallets.api.models.requests.self.BalanceRequest;
 import com.wallets.api.models.requests.self.TransactionsRequest;
 import com.wallets.api.models.requests.self.VerifyBvnRequest;
+import com.wallets.api.models.requests.wallet.*;
+import com.wallets.api.models.responses.ApiResponse;
 import com.wallets.api.models.responses.Balance;
+import com.wallets.api.models.responses.Response;
 import com.wallets.api.models.responses.self.SelfTransactions;
 import com.wallets.api.models.responses.self.VerifySelfBvn;
 import com.wallets.api.models.responses.self.Wallet;
 import com.wallets.api.models.responses.self.WalletTransaction;
+import com.wallets.api.models.responses.wallet.AccountData;
+import com.wallets.api.models.responses.wallet.CreditResponse;
+import com.wallets.api.models.responses.wallet.DebitResponse;
+import com.wallets.api.models.responses.wallet.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,4 +92,66 @@ public class WalletApiTests {
 
         Assert.assertTrue(walletTransactions.size() >= 0);
     }
+
+    @Test
+    public void debitWallet() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var debitRequest = new DebitWalletRequest();
+        var amount = new BigDecimal(1.0);
+        debitRequest.setAmount(amount);
+        debitRequest.setPhoneNumber("08057998539");
+        debitRequest.setTransactionReference(getTransactionRef());
+
+        DebitResponse response = walletApi.debitWallet(debitRequest);
+
+        Assert.assertTrue(response.getAmountCredited().longValue() == 1);
+    }
+
+    @Test
+    public void creditWallet() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var creditRequest = new CreditWalletRequest();
+        var amount = new BigDecimal(1.0);
+        creditRequest.setAmount(amount);
+        creditRequest.setPhoneNumber("08057998539");
+        creditRequest.setTransactionReference(getTransactionRef());
+
+        CreditResponse response = walletApi.creditWallet(creditRequest);
+
+        Assert.assertTrue(response.getAmountCredited().longValue() == 1);
+    }
+
+    @Test
+    public void retrieveAccountNo() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var retrieveAccountNoReq = new RetrieveAccountNoRequest();
+        retrieveAccountNoReq.setPhoneNumber("08148657415");
+
+        AccountData accountData = walletApi.retrieveWalletAccountNo(retrieveAccountNoReq);
+        Assert.assertNotNull(accountData.getAccountNumber());
+        Assert.assertNotNull(accountData.getAccountName());
+        Assert.assertNotNull(accountData.getBank());
+    }
+    @Test
+    public void setWalletPassword() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var walletPasswordReq = new SetPasswordRequest();
+        walletPasswordReq.setPassword("P@$$w0rd");
+        walletPasswordReq.setPhoneNumber("08057998539");
+
+        Response response = walletApi.setWalletPassword(walletPasswordReq);
+        Assert.assertEquals(response.getResponseCode(), "200");
+    }
+
+    @Test
+    public void getUser() throws InvalidRequestException, ServerErrorException, UnauthorizedException, IOException {
+        var getUserRequest = new GetUserRequest();
+        getUserRequest.setPhoneNumber("08057998539");
+
+        User user = walletApi.getUser(getUserRequest);
+        Assert.assertNotNull(user);
+    }
+
+    private String getTransactionRef() {
+        double ref = Math.floor(Math.random() * (9 * Math.pow(10, 10 - 1))) + Math.pow(10, 10 - 1);
+        return String.valueOf(ref);
+    }
+
+
 }

@@ -1,16 +1,19 @@
 package com.wallets.api.models.responses.wallet;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+    @JsonProperty("BVN")
     private String bvn;
     private String password;
-    private Date dateOfBirth;
-    private Date dateSignedup;
+    private String dateOfBirth;
+    private String dateSignedup;
     private String accountNo;
     private String accountName;
     private String bank;
@@ -63,19 +66,19 @@ public class User {
         this.password = password;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Date getDateSignedup() {
+    public String getDateSignedup() {
         return dateSignedup;
     }
 
-    public void setDateSignedup(Date dateSignedup) {
+    public void setDateSignedup(String dateSignedup) {
         this.dateSignedup = dateSignedup;
     }
 
